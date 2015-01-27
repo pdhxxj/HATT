@@ -6,20 +6,36 @@ import os
 from Core.Utils.Cmd.adb_interface import AdbInterface
 from Core.Action.Log.log import Log
 from Core.Action.System.system import SystemAction
+from Core.Action.App.app import LocalAction
 from app import AppInfo
 
 shell=AdbInterface()
 a=AppInfo()
 l=Log()
+la=LocalAction()
 s=SystemAction()
-killLogcatPath=os.path.join(os.path.abspath(".."),"Core","Lib","cmd","kl.bat")
+prank=os.path.join(os.path.abspath(".."),"Core","Lib","procrank")
+libso=os.path.join(os.path.abspath(".."),"Core","Lib","libpagemap")
+pmem=os.path.join(os.path.abspath(".."),"Core","Lib","procmem")
 class PerformanceInfo(object):
     """
     获取部分app性能信息
     """
     def __init__(self):
         self.pattern = re.compile(r"\d+")
+        self.__install()
 
+
+    def __install(self):
+        if s.isRoot():
+            la.pushFile(prank,"/system/xbin/")
+            la.pushFile(pmem,"/system/xbin/")
+            la.pushFile(libso,"/system/lib/")
+            shell.SendShellCommand("chmod 755 /system/xbin/procrank")
+            shell.SendShellCommand("chmod 755 /system/xbin/procmem")
+            shell.SendShellCommand("chmod 755 /system/lib/libpagemap")
+        else:
+            pass
 
     def getAppStartTotalTime(self, component):
      """
@@ -61,7 +77,7 @@ class PerformanceInfo(object):
         - packagename -: 包名
         usage: getMemFromDump("com.android.settings")
         """
-        s=shell.SendShellCommand("dumpsys meminfo "+packagename).read()
+        s=shell.SendShellCommand("dumpsys meminfo "+packagename)
         if "No process found for" in s:
             return "error"
         else:
@@ -77,12 +93,15 @@ class PerformanceInfo(object):
         - packagename -: 包名
         usage: getMemFromProcrank("com.android.settings")
         """
-        l=shell.SendShellCommand("procrank ^|grep "+packagename).split("\n")
-        count=0
-        for x in l:
-            if x!="":
-                count=count+int(self.pattern.findall(x)[3])
-        return count
+        if s.searchFile("/system/xbin","procrank"):
+            l=shell.SendShellCommand("procrank ^|grep "+packagename).split("\n")
+            count=0
+            for x in l:
+                if x!="":
+                    count=count+int(self.pattern.findall(x)[3])
+            return count
+        else:
+            return None
 
     def getCpuFromDump(self,packagename):
         """
