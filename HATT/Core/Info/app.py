@@ -34,27 +34,26 @@ class AppInfo(object):
         usage: getPid("com.android.settings")
         """
         if system is "Windows":
-            string = shell.SendShellCommand("ps | findstr " + packageName + "$")
-
-        string = shell.SendShellCommand("ps | grep -w " + packageName)
+            string = shell.SendShellCommand("ps ^| grep " + packageName + "$")
+        else:
+            string = shell.SendShellCommand("ps ^| grep -w " + packageName)
 
         if string == '':
             return "the process doesn't exist."
 
-        pattern = re.compile(r"\d+")
         result = string.split(" ")
         result.remove(result[0])
 
-        return  pattern.findall(" ".join(result))[0]
+        return  self.pattern.findall(" ".join(result))[0]
 
     def getFocusedPackageAndActivity(self):
         """
         获取当前应用界面的包名和Activity，返回的字符串格式为：packageName/activityName
         usage: getFocusedPackageAndActivity()
         """
-        pattern = re.compile(r"[a-zA-Z0-9\.]+/.[a-zA-Z0-9\.]+")
-        out = shell.SendShellCommand("dumpsys window w | findstr \/ | findstr name=")
-        return pattern.findall(out)[0]
+        pa = re.compile(r"[a-zA-Z0-9\.]+/.[a-zA-Z0-9\.]+")
+        out = shell.SendShellCommand("dumpsys window w ^| grep \/ ^| grep name=")
+        return pa.findall(out)[0]
 
     def getCurrentPackageName(self):
         """
@@ -62,6 +61,61 @@ class AppInfo(object):
         usage: getCurrentPackageName()
         """
         return self.getFocusedPackageAndActivity().split("/")[0]
+
+    def getCurrentCompont(self):
+        """
+        获取当前运行应用的compont
+        usage: getCurrentCompont()
+        """
+        rezult=shell.SendShellCommand("dumpsys activity top ^|grep ACTIVITY").split()
+        if len(rezult)==4:
+            return rezult[1]
+        else:
+            return None
+
+    def getCurrentPid(self):
+        """
+        获取当前运行应用的pid
+        usage: getCurrentPid()
+        """
+        rezult=shell.SendShellCommand("dumpsys activity top ^|grep ACTIVITY").split()
+        if len(rezult)==4:
+            return rezult[3].split("=")[1]
+        else:
+            return None
+
+    def getCurrentHandle(self):
+        """
+        获取当前运行应用的handle
+        usage: getCurrentHandle()
+        """
+        rezult=shell.SendShellCommand("dumpsys activity top ^|grep ACTIVITY").split()
+        if len(rezult)==4:
+            return rezult[2]
+        else:
+            return None
+
+    def getcurrentActivity(self):
+        """
+        获取当前运行应用的activity
+        usage: getCurrentActivity()
+        """
+        rezult=self.getCurrentCompont()
+        if rezult!=None:
+            return rezult.split("/")[1]
+        else:
+            return None
+
+    def getcurrentPackageName(self):
+        """
+        获取当前运行应用的包名
+        usage: getcurrentPackageName()
+        """
+        rezult=self.getCurrentCompont()
+        if rezult!=None:
+            return rezult.split("/")[0]
+        else:
+            return None
 
     def getCurrentActivity(self):
         """
