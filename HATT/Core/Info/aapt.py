@@ -28,7 +28,7 @@ class AAPT(object):
         获取apk包名
         args:
         - path -: apk文件地址
-        usage: getApkPname("e:\\tt\\a.apk")
+        usage: getApkPname("e:\\tt\\procmem.apk")
         """
         l=[]
         l=self.__getRes(path)[1].split("\r\n")
@@ -39,7 +39,7 @@ class AAPT(object):
         获取apk内部版本号
         args:
         - path -: apk文件地址
-        usage: getApkVersionCode("e:\\tt\\a.apk")
+        usage: getApkVersionCode("e:\\tt\\procmem.apk")
         """
         l=[]
         l=self.__getRes(path)[1].split("\r\n")
@@ -50,7 +50,7 @@ class AAPT(object):
         获取apk版本号
         args:
         - path -: apk文件地址
-        usage: getApkVersionName("e:\\tt\\a.apk")
+        usage: getApkVersionName("e:\\tt\\procmem.apk")
         """
         l=[]
         ll=[]
@@ -60,10 +60,11 @@ class AAPT(object):
         del ll[0]
         count=0
         for x in ll:
-            if count==len(ll)-1:
+            count+=1
+            if count==len(ll):
                 s=s+x
-            else:
-                s=s+x+"."
+                break
+            s+=x+"."
         return s
 
     def getSuportMinSdkVersion(self,path):
@@ -71,7 +72,7 @@ class AAPT(object):
         获取apk支持的最小SDK版本号
         args:
         - path -: apk文件地址
-        usage: getSuportMinSdkVersion("e:\\tt\\a.apk")
+        usage: getSuportMinSdkVersion("e:\\tt\\procmem.apk")
         """
         l=[]
         l=self.__getRes(path)[2].split("\r\n")
@@ -82,7 +83,7 @@ class AAPT(object):
         获取apk支持的最大SDK版本号
         args:
         - path -: apk文件地址
-        usage: getSuportMaxSdkVersion("e:\\tt\\a.apk")
+        usage: getSuportMaxSdkVersion("e:\\tt\\procmem.apk")
         """
         l=[]
         l=self.__getRes(path)[3].split("\r\n")
@@ -93,7 +94,7 @@ class AAPT(object):
         获取apk启动activity
         args:
         - path -: apk文件地址
-        usage: getLaunchActivity("e:\\tt\\a.apk")
+        usage: getLaunchActivity("e:\\tt\\procmem.apk")
         """
         l=[]
         l=self.__getRes(path)
@@ -109,7 +110,7 @@ class AAPT(object):
         获取apk权限清单
         args:
         - path -: apk文件地址
-        usage: getApkPermisson("e:\\tt\\a.apk")
+        usage: getApkPermisson("e:\\tt\\procmem.apk")
         """
         l=[]
         l=self.__getRes(path)
@@ -129,6 +130,6 @@ class AAPT(object):
         获取apk权限条数
         args:
         - path -: apk文件地址
-        usage: getApkPermissonNo("e:\\tt\\a.apk")
+        usage: getApkPermissonNo("e:\\tt\\procmem.apk")
         """
         return len(self.getApkPermisson(path))
