@@ -77,7 +77,7 @@ class PerformanceInfo(object):
         - packagename -: 包名
         usage: getMemFromProcrank("com.android.settings")
         """
-        l=shell.SendShellCommand("procrank ^|grep "+packagename).read().split("\n")
+        l=shell.SendShellCommand("procrank ^|grep "+packagename).split("\n")
         count=0
         for x in l:
             if x!="":
@@ -91,18 +91,18 @@ class PerformanceInfo(object):
         - packagename -: 包名
         usage: getCpuFromDump("com.android.settings")
         """
-        l= shell.SendShellCommand("dumpsys cpuinfo ^|grep "+packagename).read().split(" ")
+        l= shell.SendShellCommand("dumpsys cpuinfo ^|grep "+packagename).split(" ")
         while l[0]=="":
             l.remove("")
         return l
 
     def getCpuFromTop(self,packagename):
-        l=shell.SendShellCommand("top -n 1 ^|grep "+packagename).read().split("\n")
+        l=shell.SendShellCommand("top -n 1 ^|grep "+packagename).split("\n")
         count=0
         for x in l:
             if x!="":
                 count=count+int(self.pattern.findall(x)[2])
-        return count+"%"
+        return str(count)+"%"
 
 
     def getCurFlowFromProc(self,packagename):
@@ -113,8 +113,8 @@ class PerformanceInfo(object):
         usage: getFlowFromProc("com.android.settings")
         """
         uid=a.getUid(packagename)
-        tcp_rcv=int(shell.SendShellCommand("cat /proc/uid_stat/"+uid+"/tcp_rcv").read())
-        tcp_snd=int(shell.SendShellCommand("cat /proc/uid_stat/"+uid+"/tcp_snd").read())
+        tcp_rcv=int(shell.SendShellCommand("cat /proc/uid_stat/"+uid+"/tcp_rcv"))
+        tcp_snd=int(shell.SendShellCommand("cat /proc/uid_stat/"+uid+"/tcp_snd"))
         return tcp_rcv+tcp_snd
 
 
@@ -123,7 +123,7 @@ class PerformanceInfo(object):
         获取电池电量
         usage: getBatteryLevel()
         """
-        level = shell.SendShellCommand("dumpsys battery | findstr level").read().split(": ")[-1]
+        level = shell.SendShellCommand("dumpsys battery | findstr level").split(": ")[-1]
 
         return int(level)
 
@@ -142,7 +142,7 @@ class PerformanceInfo(object):
                       3 : "BATTERY_STATUS_DISCHARGING",
                       4 : "BATTERY_STATUS_NOT_CHARGING",
                       5 : "BATTERY_STATUS_FULL"}
-        status = shell.SendShellCommand("dumpsys battery | findstr status").read().split(": ")[-1]
+        status = shell.SendShellCommand("dumpsys battery | findstr status").split(": ")[-1]
 
         return statusDict[int(status)]
 
@@ -151,6 +151,6 @@ class PerformanceInfo(object):
         获取电池温度
         usage: getBatteryTemp()
         """
-        temp = shell.SendShellCommand("dumpsys battery | findstr temperature").read().split(": ")[-1]
+        temp = shell.SendShellCommand("dumpsys battery | findstr temperature").split(": ")[-1]
 
         return int(temp) / 10.0
