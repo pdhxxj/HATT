@@ -1,17 +1,27 @@
 __author__ = 'kasi'
 #coding=utf-8
+import os
+import re
 from Core.Utils.Cmd.adb_interface import AdbInterface
+from Core.Action.App.app import LocalAction
 shell=AdbInterface()
-
+l=LocalAction()
+busyboxPath=os.path.join(os.path.abspath(".."),"Core","Lib","busybox")
 class Crash(object):
     def __init__(self):
-        pass
+        self.pattern = re.compile(r"\d+")
+        self.__install()
+
+    def __install(self):
+        l.pullFile(busyboxPath,"/system/bin/")
+        shell.SendShellCommand("chmod 755 /system/bin/busybox")
 
     def __getData(self,key):
-        return shell.SendShellCommand("ls /data/system/dropbox ^|grep "+key).read()
+        return shell.SendShellCommand("ls /data/system/dropbox ^|grep "+key)
 
     def __getdata(self,key):
-         return shell.SendShellCommand("ls /data/system/dropbox ^|grep "+key+" |wc -l").read()
+         return self.pattern.findall(
+             shell.SendShellCommand("ls /data/system/dropbox ^|grep "+key+" ^|busybox wc -l"))[0]
 
     def Check(self):
         crash=self.__getData("crash")
