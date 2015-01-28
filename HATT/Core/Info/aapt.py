@@ -21,7 +21,7 @@ class AAPT(object):
         self.pattern = re.compile(r"\d+")
 
     def __getRes(self,path):
-        return aapt("d badging "+path).read().split(":")
+        return aapt("d badging "+path).read().split()
 
     def getApkPname(self,path):
         """
@@ -30,9 +30,12 @@ class AAPT(object):
         - path -: apk文件地址
         usage: getApkPname("e:\\tt\\procmem.apk")
         """
-        l=[]
-        l=self.__getRes(path)[1].split("\r\n")
-        return l[0].split("=")[1].split(" ")[0]
+        count=0
+        print self.__getRes(path)
+        for pname in self.__getRes(path):
+            count+=1
+            if "package:" in pname:
+                return self.__getRes(path)[count].split("=")[1].strip('\'')
 
     def getApkVersionCode(self,path):
         """
@@ -41,9 +44,9 @@ class AAPT(object):
         - path -: apk文件地址
         usage: getApkVersionCode("e:\\tt\\procmem.apk")
         """
-        l=[]
-        l=self.__getRes(path)[1].split("\r\n")
-        return  self.pattern.findall(str(l))[0]
+        for code in self.__getRes(path):
+            if "versionCode=" in code:
+                return code.split("=")[1].strip('\'')
 
     def getApkVersionName(self,path):
         """
@@ -52,20 +55,10 @@ class AAPT(object):
         - path -: apk文件地址
         usage: getApkVersionName("e:\\tt\\procmem.apk")
         """
-        l=[]
-        ll=[]
-        s=""
-        l=self.__getRes(path)[1].split("\r\n")
-        ll=self.pattern.findall(str(l))
-        del ll[0]
-        count=0
-        for x in ll:
-            count+=1
-            if count==len(ll):
-                s=s+x
-                break
-            s+=x+"."
-        return s
+        for name in self.__getRes(path):
+            if "versionName=" in name:
+                return name.split("=")[1].strip('\'')
+
 
     def getSuportMinSdkVersion(self,path):
         """
@@ -74,9 +67,10 @@ class AAPT(object):
         - path -: apk文件地址
         usage: getSuportMinSdkVersion("e:\\tt\\procmem.apk")
         """
-        l=[]
-        l=self.__getRes(path)[2].split("\r\n")
-        return  self.pattern.findall(str(l))[0]
+        for minversion in self.__getRes(path):
+            if "sdkVersion:" in minversion:
+                return minversion.split(":")[1].strip('\'')
+
 
     def getSuportMaxSdkVersion(self,path):
         """
@@ -85,9 +79,10 @@ class AAPT(object):
         - path -: apk文件地址
         usage: getSuportMaxSdkVersion("e:\\tt\\procmem.apk")
         """
-        l=[]
-        l=self.__getRes(path)[3].split("\r\n")
-        return  self.pattern.findall(str(l))[0]
+        for maxversion in self.__getRes(path):
+            if "targetSdkVersion:" in maxversion:
+                return maxversion.split(":")[1].strip('\'')
+
 
     def getLaunchActivity(self,path):
         """
@@ -96,14 +91,40 @@ class AAPT(object):
         - path -: apk文件地址
         usage: getLaunchActivity("e:\\tt\\procmem.apk")
         """
-        l=[]
-        l=self.__getRes(path)
         count=0
-        for x in l:
-            count=count+1
-            if "launchable-activity" in x:
-                break
-        return l[count].split(" ")[1].split("=")[1]
+        print self.__getRes(path)
+        for activity in self.__getRes(path):
+            count+=1
+            if "launchable-activity:" in activity:
+                return self.__getRes(path)[count].split("=")[1].strip('\'')
+
+    def supportAnyDensity(self,path):
+        """
+        判断应用是否支持适配
+        args:
+        - path -: apk文件地址
+        usage: supportAnyDensity("e:\\tt\\procmem.apk")
+        """
+        count=0
+        print self.__getRes(path)
+        for sad in self.__getRes(path):
+            count+=1
+            if "supports-any-density:" in sad:
+                if self.__getRes(path)[count].strip('\'')=='true':
+                    return True
+                else:
+                    return False
+
+    def getIconAdress(self,path):
+        """
+        获取apk图标地址
+        args:
+        - path -: apk文件地址
+        usage: getIconAdress("e:\\tt\\procmem.apk")
+        """
+        for icon in self.__getRes(path):
+            if "icon=:" in icon:
+                return icon.split("=")[1].strip('\'')
 
     def getApkPermisson(self,path):
         """
@@ -112,18 +133,12 @@ class AAPT(object):
         - path -: apk文件地址
         usage: getApkPermisson("e:\\tt\\procmem.apk")
         """
-        l=[]
-        l=self.__getRes(path)
-        tmp=[]
-        s=[]
-        for x in l:
-            if "uses-permission" in x:
-                tmp.append(x)
-        del tmp[0]
-        del tmp[len(tmp)-1]
-        for y in tmp:
-            s.append(str(y).split("\n")[0].replace("'",""))
-        return s
+        permisson=[]
+        for pm in self.__getRes(path):
+            if "uses-permission:" in pm:
+                permisson.append(pm.split(":")[1].strip('\''))
+        return permisson
+
 
     def getApkPermissonNo(self,path):
         """
