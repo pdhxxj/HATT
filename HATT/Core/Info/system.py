@@ -32,7 +32,7 @@ class SystemInfo(object):
         """
         l=[]
         tmp=[]
-        l=shell.SendCommand("devices").split("\n")
+        l=shell.SendCommand("devices").split("\r\n")
         del l[0]
         for x in l:
             if x!="":
@@ -45,8 +45,8 @@ class SystemInfo(object):
          usage: getAppList()
         """
         app=[]
-        for packages in shell.SendShellCommand("pm list packages"):
-            app.append(packages.split(":")[-1].splitlines()[0])
+        for packages in shell.SendShellCommand("pm list packages").split():
+            app.append(packages.split(":")[1])
 
         return app
 
@@ -57,8 +57,8 @@ class SystemInfo(object):
          usage: getSystemAppList()
         """
         sysApp = []
-        for packages in shell.SendShellCommand("pm list packages -s"):
-            sysApp.append(packages.split(":")[-1].splitlines()[0])
+        for packages in shell.SendShellCommand("pm list packages -s").split():
+            sysApp.append(packages.split(":")[1])
 
         return sysApp
 
@@ -68,8 +68,8 @@ class SystemInfo(object):
          usage: getThirdAppList()
         """
         thirdApp = []
-        for packages in shell.SendShellCommand("pm list packages -3"):
-            thirdApp.append(packages.split(":")[-1].splitlines()[0])
+        for packages in shell.SendShellCommand("pm list packages -3").split():
+            thirdApp.append(packages.split(":")[1])
 
         return thirdApp
 
@@ -81,9 +81,8 @@ class SystemInfo(object):
         usage: getMatchingAppList("qq")
         """
         matApp = []
-        for packages in shell.SendShellCommand("pm list packages " + keyword):
-            matApp.append(packages.split(":")[-1].splitlines()[0])
-
+        for packages in shell.SendShellCommand("pm list packages " + keyword).split():
+            matApp.append(packages.split(":")[1])
         return matApp
 
     def getAppAddressFromPname(self,packagename):
