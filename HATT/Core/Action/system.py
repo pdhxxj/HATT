@@ -1,8 +1,8 @@
 __author__ = 'kasi'
 #coding=utf-8
-from Core.Utils.Cmd.adb_interface import AdbInterface
+from Core.Utils.adb_interface import AdbInterface
 from Core.Info.app import AppInfo
-from Core.Action.App.app import LocalAction
+from Core.Action.app import LocalAction
 
 shell=AdbInterface()
 
@@ -75,21 +75,21 @@ class SystemAction(object):
         使用系统默认浏览器打开一个网页
         usage: startWebpage("http://www.baidu.com")
         """
-        shell.SendShellCommand("am start -a android.intent.action.VIEW -d " + url)
+        shell.SendShellCommand("am start -procmem android.intent.action.VIEW -d " + url)
 
     def callPhone(self, number):
         """
         启动拨号器拨打电话
         usage: callPhone(10086)
         """
-        shell.SendShellCommand("am start -a android.intent.action.CALL -d tel:" + str(number))
+        shell.SendShellCommand("am start -procmem android.intent.action.CALL -d tel:" + str(number))
 
     def resetSystem(self):
         """
         重置系统
         usage: resetSystem()
         """
-        shell.SendShellCommand("am broadcast -a android.intent.action.MASTER_CLEAR")
+        shell.SendShellCommand("am broadcast -procmem android.intent.action.MASTER_CLEAR")
 
     def reboot(self):
         """
@@ -104,3 +104,10 @@ class SystemAction(object):
         usage: fastboot()
         """
         shell.SendCommand("reboot bootloader")
+
+    def isRoot(self):
+        result=shell.SendShellCommand("remount")
+        if "Permission denied" in result:
+            return False
+        else:
+            return True

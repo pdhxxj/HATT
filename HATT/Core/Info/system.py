@@ -2,7 +2,7 @@ __author__ = 'kasi'
 #coding=utf-8
 import re
 
-from Core.Utils.Cmd.adb_interface import AdbInterface
+from Core.Utils.adb_interface import AdbInterface
 
 shell=AdbInterface()
 
@@ -36,7 +36,7 @@ class SystemInfo(object):
         del l[0]
         for x in l:
             if x!="":
-                tmp.append(x.split("\t")[0])
+                tmp.append(x.split("\t")[0].strip('\''))
         return tmp
 
     def getAppList(self):

@@ -1,4 +1,10 @@
 # HATT
+原理：基于android uiautomator跟adb
+环境：python2.7.x+android sdk
+功能：支持功能、性能、稳定性
+优点：无需安装任何apk或其他插件，支持跨应用，无签名烦恼
+缺点：不支持webview、动态页面、中文输入及查找
+以下是demo
 
 ```python
 __author__ = 'kasi'

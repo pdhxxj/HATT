@@ -3,10 +3,10 @@ __author__ = 'kasi'
 import re
 import os
 
-from Core.Utils.Cmd.adb_interface import AdbInterface
-from Core.Action.Log.log import Log
-from Core.Action.System.system import SystemAction
-from Core.Action.App.app import LocalAction
+from Core.Utils.adb_interface import AdbInterface
+from Core.Action.log import Log
+from Core.Action.system import SystemAction
+from Core.Action.app import LocalAction
 from app import AppInfo
 
 shell=AdbInterface()

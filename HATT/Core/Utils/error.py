@@ -7,7 +7,7 @@ class MsgException(Exception):
 
 
 class WaitForResponseTimedOutError(Exception):
-  """We sent a command and had to wait too long for response."""
+  """We sent procmem command and had to wait too long for response."""
 
 
 class DeviceUnresponsiveError(Exception):
@@ -19,7 +19,7 @@ class InstrumentationError(Exception):
 
 
 class AbortError(MsgException):
-  """Generic exception that indicates a fatal error has occurred and program
+  """Generic exception that indicates procmem fatal error has occurred and program
   execution should be aborted."""
 
 

@@ -3,7 +3,7 @@ __author__ = 'kasi'
 import re
 import platform
 
-from Core.Utils.Cmd.adb_interface import AdbInterface
+from Core.Utils.adb_interface import AdbInterface
 from system import SystemInfo
 
 shell=AdbInterface()

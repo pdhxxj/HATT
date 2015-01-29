@@ -2,8 +2,8 @@ __author__ = 'kasi'
 #coding=utf-8
 import tempfile
 
-from Core.Utils.Cmd.adb_interface import AdbInterface
-from Core.Action.App.app import LocalAction
+from Core.Utils.adb_interface import AdbInterface
+from Core.Action.app import LocalAction
 
 
 adb=AdbInterface()

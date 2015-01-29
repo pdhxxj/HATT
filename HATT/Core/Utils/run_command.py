@@ -14,7 +14,7 @@ _abort_on_error=False
 
 def SetAbortOnError(abort=True):
   """Sets behavior of RunCommand to throw AbortError if command process returns
-  a negative error code"""
+  procmem negative error code"""
   global _abort_on_error
   _abort_on_error = abort
 
@@ -105,7 +105,7 @@ def RunOnce(cmd, timeout_time=None, return_output=True, stdin_input=None):
         # process already dead. No action required.
         pass
 
-      logger.SilentLog("about to raise a timeout for: %s" % cmd)
+      logger.SilentLog("about to raise procmem timeout for: %s" % cmd)
 
       raise error.WaitForResponseTimedOutError
     if not break_loop:

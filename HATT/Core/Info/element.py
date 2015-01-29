@@ -6,10 +6,10 @@ import os
 import re
 import xml.etree.cElementTree as ET
 
-from Core.Utils.Cmd.adb_interface import AdbInterface
+from Core.Utils.adb_interface import AdbInterface
 from Core.Info.system import SystemInfo
-from Core.Action.App.app import LocalAction
-from Core.Action.System.system import SystemAction
+from Core.Action.app import LocalAction
+from Core.Action.system import SystemAction
 
 shell=AdbInterface()
 si=SystemInfo()

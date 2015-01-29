@@ -170,7 +170,7 @@ class SurfaceStatsCollector(object):
       raise ret
     return ret
 
-  from Core.Utils.Cmd.adb_interface import AdbInterface
+  from Core.Utils.adb_interface import AdbInterface
   from Core.Info.app import AppInfo
   a=AdbInterface()
   t=AppInfo()

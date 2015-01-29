@@ -1,6 +1,6 @@
 __author__ = 'kasi'
 #coding=utf-8
-from Core.Utils.Cmd.adb_interface import AdbInterface
+from Core.Utils.adb_interface import AdbInterface
 shell=AdbInterface()
 
 
