@@ -4,8 +4,8 @@ import time
 import subprocess
 import threading
 
-import Core.Utils.Error.error as error
-import Core.Utils.Log.logger as logger
+import Core.Utils.error as error
+import Core.Utils.logger as logger
 
 
 _abort_on_error=False

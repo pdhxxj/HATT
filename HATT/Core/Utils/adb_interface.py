@@ -1,7 +1,7 @@
 __author__ = 'kasi'
 #coding=utf-8
 import run_command
-import Core.Utils.Log.logger as logger
+import Core.Utils.logger as logger
 
 class AdbInterface:
     _target_arg = ""
