@@ -10,7 +10,7 @@ from Core.Utils.adb_interface import AdbInterface
 from Core.Info.system import SystemInfo
 from Core.Action.app import LocalAction
 from Core.Action.system import SystemAction
-
+from uiautomator import devices as d
 shell=AdbInterface()
 si=SystemInfo()
 l=LocalAction()
@@ -28,14 +28,16 @@ class Element(object):
         self.tempFile = tempfile.gettempdir()
         self.pattern = re.compile(r"\d+")
 
+    """
     def __uiDump(self):
-        """
+
         获取当前Activity的控件树
-        """
+
         if int(si.getSdkVersion())>18:
             shell.SendShellCommand("uiautomator dump /data/local/tmp/uidump.xml")
         else:
             shell.SendShellCommand("uiautomator --compressed dump /data/local/tmp/uidump.xml")
+
 
     def __uidump(self):
         self.__uiDump()
@@ -43,6 +45,9 @@ class Element(object):
         l.pullFile("/data/local/tmp/uidump.xml",self.tempFile)
         print 2
         sa.delFile("/data/local/tmp","uidump.xml")
+    """
+    def __uiddump(self):
+        d.dump(PATH(self.tempFile + "/uidump.xml"))
 
     def __element(self, attrib, name):
         """

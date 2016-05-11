@@ -115,6 +115,7 @@ class PerformanceInfo(object):
             l.remove("")
         return l
 
+
     def getCpuFromTop(self,packagename):
         l=shell.SendShellCommand("top -n 1 ^|grep "+packagename).split("\n")
         count=0
