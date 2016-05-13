@@ -1,12 +1,12 @@
 __author__ = 'kasi'
 #coding=utf-8
 import re
-
+import platform
 from Core.Utils.adb_interface import AdbInterface
 
 shell=AdbInterface()
 
-
+sysstr=platform.system()
 class SystemInfo(object):
     def __init__(self):
         pass
@@ -32,8 +32,13 @@ class SystemInfo(object):
         """
         l=[]
         tmp=[]
-        l=shell.SendCommand("devices").split("\r\n")
+        if sysstr == "Darwin":
+            l=shell.SendCommand("devices").split("\n")
+        else:
+            l=shell.SendCommand("devices").split("\r\n")
+
         del l[0]
+
         for x in l:
             if x!="":
                 tmp.append(x.split("\t")[0].strip('\''))
